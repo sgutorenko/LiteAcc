@@ -1759,7 +1759,7 @@ function _reset() {
 }
 function prepLinks() {
 	var a=cw.cnt.getElementsByTagName('a');
-	for(var i=0;i<a.length;i++) a[i].onclick=function() {httpRequest(this.getAttribute('link'),'',prepLinks); return false; }
+	for(var i=0;i<a.length;i++) if(a[i].hasAttribute('link')) a[i].onclick=function() {httpRequest(this.getAttribute('link'),'',prepLinks); return false; }
 }
 function moreEntries() {
 	var xhr = new XMLHttpRequest();
