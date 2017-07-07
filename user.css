@@ -1,0 +1,26 @@
+@charset "windows-1251";
+#authform {
+	position:absolute;
+	visibility:hidden;
+	width:400px;
+	height:250px;
+	border:1px solid #808080;
+	background-color:whitesmoke;
+	box-sizing: border-box;
+	border-radius:4px;	
+	font-family:arial;
+	font-size:16px;
+	font-weight:bold;
+}
+#auth {
+	width:60%;
+	margin:auto;
+}
+#auth td {
+	height:2em;
+}
+#auth td.err {
+	font-size:10px;
+	font-weight:normal;
+	color:red;
+}
