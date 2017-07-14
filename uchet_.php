@@ -1728,6 +1728,7 @@ function make_page($strings,$mm=-1) {
 }
 function show_all($query,$noEdit=false) {
 		$str='';
+		$bank=strpos($query,'LoadBank');
 		$mysqli = new mysqli(SERVER, USERNAME, DBPASS,DBNAME) or die('Ошибка подключения (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
 	    $result = $mysqli->query($query) or die("Query failed : " . $mysqli->error);
 		if($result->num_rows>0) {
@@ -1737,7 +1738,7 @@ function show_all($query,$noEdit=false) {
 			if(!$noEdit) $str.= "<th class=\"npr\"><div class=\"edit\"></div></th>";
 		    $finfo = $result->fetch_fields();
 			for ($i = 0; $i < $result->field_count; $i++) {
-				if($finfo[$i]->max_length>0 || $noEdit) {
+				if($finfo[$i]->max_length>0 || $noEdit || $bank) {
 					$str.="<th>".$finfo[$i]->name."</th>";
 				}
 			}
@@ -1746,7 +1747,7 @@ function show_all($query,$noEdit=false) {
 				$str.="<tr>";
 				if(!$noEdit) $str.= "<td class=\"npr\"><div class=\"e-edit\"></div></td>";
 		        for($i=0; $i<$result->field_count; $i++) {
-					if($finfo[$i]->max_length>0 || $noEdit) {
+					if($finfo[$i]->max_length>0 || $noEdit || $bank) {
 						if($finfo[$i]->type==246 || preg_match("/^\d+\.\d{2}$/",$line[$i]))	$str.= "<td class=\"decimal\">".($line[$i]!=0?number_format($line[$i],2,'.',DLMTR):"&nbsp;")."</td>";		// decimal
 						elseif($finfo[$i]->type==10 && ($line[$i]=='0000-00-00' || $line[$i]=='') && !$noEdit)	$str.= "<td>&nbsp;</td>";	// date
 						elseif($finfo[$i]->type==10 || $finfo[$i]->type==7)	$str.= "<td>".toOurDate($line[$i])."</td>";
