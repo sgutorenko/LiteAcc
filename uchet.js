@@ -556,15 +556,15 @@ function checkVidgets() {
 			for(var i=0;i<4;i++) {
 				switch(dir[i].d) {
 					case 'up': 		if(+vidgets[key].top-h<0) continue;
-									cw.obj.style.top=(+vidgets[key].top-h)+'px'; cw.obj.style.left=vidgets[key].left+'px'; break;
-					case 'down': 	cw.obj.style.top=(+vidgets[key].top+h)+'px'; cw.obj.style.left=vidgets[key].left+'px'; break;
+									top=+vidgets[key].top-h; left=vidgets[key].left; break;
+					case 'down': 	top=+vidgets[key].top+h; left=vidgets[key].left; break;
 					case 'left': 	if(+vidgets[key].left-w<0) continue;
-									cw.obj.style.top=vidgets[key].top+'px'; cw.obj.style.left=(+vidgets[key].left-w)+'px'; break;
+									top=vidgets[key].top; left=+vidgets[key].left-w; break;
 					case 'right': 	if(+vidgets[key].left+w+w-margin>clientWidth) continue;
-									cw.obj.style.top=vidgets[key].top+'px'; cw.obj.style.left=(+vidgets[key].left+w)+'px'; break;
+									top=vidgets[key].top; left=+vidgets[key].left+w; break;
 				}
 				var success=true;
-				for(var k in vidgets) if(cw.obj.name!=k && Math.abs(dw=cw.obj.offsetLeft-vidgets[k].left)<w && Math.abs(dh=cw.obj.offsetTop-vidgets[k].top)<h) success=false;
+				for(var k in vidgets) if(cw.obj.name!=k && Math.abs(dw=left-vidgets[k].left)<w && Math.abs(dh=top-vidgets[k].top)<h) success=false;
 				if(success) break;
 			}
 			if(!success) {
@@ -578,9 +578,9 @@ function checkVidgets() {
 						if(left+w-margin>clientWidth) {	top+=h;	left=margin; }
 					}
 				} while(!success);
-				cw.obj.style.top=top+'px';
-				cw.obj.style.left=left+'px';
 			}
+			cw.obj.style.top=top+'px';
+			cw.obj.style.left=left+'px';
 			break;
 		}
 	}
