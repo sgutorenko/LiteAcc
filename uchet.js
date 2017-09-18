@@ -517,6 +517,7 @@ function checkMouseUp(e) {
 		document.onselectstart=null;
 		cw.move=false;
 		if(cw.obj.className=='vidget' && (vidgets[cw.obj.name].top!=cw.obj.offsetTop || vidgets[cw.obj.name].left!=cw.obj.offsetLeft)) {
+			checkVidgets();
 			vidgets[cw.obj.name].left=cw.obj.offsetLeft;
 			vidgets[cw.obj.name].top=cw.obj.offsetTop;
 			moveTimerId=setTimeout(saveVidgets,2000);
@@ -532,6 +533,54 @@ function checkTouchEnd(e) {
 			vidgets[cw.obj.name].left=cw.obj.offsetLeft;
 			vidgets[cw.obj.name].top=cw.obj.offsetTop;
 			moveTimerId=setTimeout(saveVidgets,2000);
+		}
+	}
+}
+function checkVidgets() {
+	var margin=20;
+	var w=cw.obj.offsetWidth+margin;
+	var h=cw.obj.offsetHeight+margin;
+	var clientWidth=document.body.clientWidth;
+	var dh, dw;
+	var dir=[];
+	var top=cw.obj.offsetTop;
+	var left=cw.obj.offsetLeft;
+	for(var key in vidgets) {
+		if(cw.obj.name!=key && Math.abs(dw=cw.obj.offsetLeft-vidgets[key].left)<w && Math.abs(dh=cw.obj.offsetTop-vidgets[key].top)<h) {
+			dir.push({d:'up',v:-dh});
+			dir.push({d:'down',v:dh});
+			dir.push({d:'left',v:-dw});
+			dir.push({d:'right',v:dw});
+			dir.sort(function(a,b){return b.v-a.v;});
+			for(var i=0;i<4;i++) {
+				switch(dir[i].d) {
+					case 'up': 		if(+vidgets[key].top-h<0) continue;
+									cw.obj.style.top=(+vidgets[key].top-h)+'px'; cw.obj.style.left=vidgets[key].left+'px'; break;
+					case 'down': 	cw.obj.style.top=(+vidgets[key].top+h)+'px'; cw.obj.style.left=vidgets[key].left+'px'; break;
+					case 'left': 	if(+vidgets[key].left-w<0) continue;
+									cw.obj.style.top=vidgets[key].top+'px'; cw.obj.style.left=(+vidgets[key].left-w)+'px'; break;
+					case 'right': 	if(+vidgets[key].left+w+w-margin>clientWidth) continue;
+									cw.obj.style.top=vidgets[key].top+'px'; cw.obj.style.left=(+vidgets[key].left+w)+'px'; break;
+				}
+				var success=true;
+				for(var k in vidgets) if(cw.obj.name!=k && Math.abs(dw=cw.obj.offsetLeft-vidgets[k].left)<w && Math.abs(dh=cw.obj.offsetTop-vidgets[k].top)<h) success=false;
+				if(success) break;
+			}
+			if(!success) {
+				top=margin;
+				left=margin;
+				do {
+					success=true;
+					for(k in vidgets) if(cw.obj.name!=k && Math.abs(dw=left-vidgets[k].left)<w && Math.abs(dh=top-vidgets[k].top)<h) success=false;
+					if(!success) {
+						left+=w;
+						if(left+w-margin>clientWidth) {	top+=h;	left=margin; }
+					}
+				} while(!success);
+				cw.obj.style.top=top+'px';
+				cw.obj.style.left=left+'px';
+			}
+			break;
 		}
 	}
 }
