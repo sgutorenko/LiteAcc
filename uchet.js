@@ -530,6 +530,7 @@ function checkTouchEnd(e) {
 		cw.obj.style.transitionProperty='';
 		cw.move=false;
 		if(cw.obj.className=='vidget' && (vidgets[cw.obj.name].top!=cw.obj.offsetTop || vidgets[cw.obj.name].left!=cw.obj.offsetLeft)) {
+			checkVidgets();
 			vidgets[cw.obj.name].left=cw.obj.offsetLeft;
 			vidgets[cw.obj.name].top=cw.obj.offsetTop;
 			moveTimerId=setTimeout(saveVidgets,2000);
